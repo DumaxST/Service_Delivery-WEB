@@ -804,3 +804,64 @@ button.react-calendar__tile.react-calendar__tile--active.react-calendar__tile--r
 .lineheight1 {
   line-height: 1 !important;
 }
+
+/*switch lenguaje*/
+.container-languages {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center; /* Centra verticalmente */
+  justify-content: center;
+  gap: 0px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+.language {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.switch {
+  align-self: center;
+  justify-self: center;
+  margin-right: -24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  align-self: center;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #13b497;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 2px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #13b497;
+}
+
+input:checked + .slider:before {
+  transform: translateX(17px);
+}
