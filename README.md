@@ -1,12 +1,22 @@
-## Prerequisites
-Before getting started with Ecme, ensure your development environment has the following tools installed:
+# Installation
 
-Node.js
-npm
-## Installing Ecme
-Once you've chosen your desired package, navigate to the project's root directory (where package.json is located) and run the following command in your console:
+## 1. Install npm
+It will create a `node_modules` folder where all dependency files will be installed with this command:
 ```sh
 npm install
 ```
 
-This will install all necessary dependencies in the node_modules directory, allowing you to start development.
+## 2.- Run Project
+With is command file will be compiled and it will be loaded on local server `http://localhost:5173`. npm run dev
+```sh
+npm run dev
+```
+
+## 3.- Production Build
+Builds the app for production to the `build` folder. Run the following command in your terminal. npm run build
+```sh
+npm run build
+```
+
+## 4.- Further help
+You can learn more in the Vite Documentation To learn Vite.
