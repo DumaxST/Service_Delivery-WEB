@@ -1,0 +1,17 @@
+{
+    "emailRequired": "Email is Required",
+    "passwordRequired": "Password is Required",
+    "checkStatus": "Check the Status",
+    "loremIpsumInfo": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters,",
+    "privacyPolicy": "Privacy Policy",
+    "contact": "Contact",
+    "welcome": "Welcome to Karciz",
+    "signInInfo": "Sign in by entering information below",
+    "email": "Email",
+    "password": "Password",
+    "rememberPreference": "Remember my preference",
+    "signIn": "Sign In",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up"
+  }
+  
