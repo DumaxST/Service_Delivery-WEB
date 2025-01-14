@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "default": "service-delivery-development",
+    "development": "service-delivery-development"
+  },
+  "targets": {
+    "service-delivery-development": {
+      "hosting": {
+        "development": [
+          "service-delivery-development"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
