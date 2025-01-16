@@ -91,6 +91,12 @@
   --font-family-title: Roboto, sans-serif;
   --title: #3d4465; }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box !important;
+}
+
 .gradient_one {
   background-image: linear-gradient(to right, rgba(186, 1, 181, 0.85) 0%, rgba(103, 25, 255, 0.85) 100%); }
 
@@ -308,7 +314,8 @@ body {
   text-align: var(--bs-body-text-align);
   background-color: var(--bs-body-bg);
   -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); 
+}
 
 hr {
   margin: 1rem 0;
@@ -338,12 +345,17 @@ h2, .h2 {
   @media (min-width: 1200px) {
     h2, .h2 {
       font-size: 1.875rem; } }
+      @media (max-width: 700px) {
+        h3, .h3 {
+          font-size: 2rem !important;
+        }
+      }
 
 h3, .h3 {
   font-size: calc(1.275rem + 0.3vw); }
   @media (min-width: 1200px) {
     h3, .h3 {
-      font-size: 1.5rem; } }
+      font-size: 1.8rem; } }
 
 h4, .h4 {
   font-size: 1.125rem; }
@@ -1761,6 +1773,14 @@ progress {
   margin-top: 0.25rem;
   font-size: 0.875em;
   color: #89879f; }
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.input-group .input-group-text {
+  cursor: pointer;
+}
 
 .form-control {
   display: block;
@@ -8967,7 +8987,7 @@ a {
   transition: all .2s ease;
   z-index: 5; }
   .nav-header .logo-abbr {
-    max-width: 45px; }
+    max-width: 40px; }
     @media only screen and (max-width: 575px) {
       .nav-header .logo-abbr {
         max-width: 35px; } }
@@ -9004,6 +9024,33 @@ a {
     margin-top: 5px; }
     [data-theme-version="dark"] .nav-header .brand-title {
       background-position: 0 120%; }
+    .nav-header .brand-logo .logo-dumax {
+        width: 80px;
+        display: inline-block;
+      }
+      
+    .nav-header.menu-closed .brand-logo .logo-dumax {
+        display: none;
+      }
+      
+  @media only screen and (max-width: 1400px) {
+    .nav-header .brand-logo .logo-dumax {
+      width: 60px;
+    }
+  }
+
+  @media only screen and (max-width: 1024px) {
+    .nav-header .brand-logo .logo-dumax {
+      width: 35px;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    .nav-header .brand-logo .logo-dumax {
+      display: none;
+    }
+  }
+
 
 @media only screen and (max-width: 1023px) {
   .nav-header {
@@ -25089,7 +25136,7 @@ table.dataTable thead .sorting_desc:after {
   background-size: cover;
   background-position: center;
   position: relative;
-  z-index: 1; }
+  z-index: 1;}
   .login-main-page .login-wrapper {
     background: #24292d;
     max-width: 1170px;
@@ -25110,7 +25157,8 @@ table.dataTable thead .sorting_desc:after {
       padding: 50px; } }
   @media only screen and (max-width: 575px) {
     .login-main-page {
-      padding: 0px; } }
+      padding: 0px;
+     } }
 
 .login-wrapper {
   display: flex;
@@ -25124,9 +25172,9 @@ table.dataTable thead .sorting_desc:after {
     display: table;
     padding: 50px;
     z-index: 1;
-    background-size: 100%;
+    background-size: cover;
     background-repeat: no-repeat;
-    background-position: bottom;
+    background-position: center;
     background-color: #fff; }
     .login-wrapper .login-aside-left:after {
       position: absolute;
@@ -25147,7 +25195,8 @@ table.dataTable thead .sorting_desc:after {
         color: var(--primary); }
   .login-wrapper .login-aside-right {
     max-width: 50%;
-    flex: 0 0 50%; }
+    flex: 0 0 50%; 
+  }
   .login-wrapper .social-icons {
     display: flex; }
     .login-wrapper .social-icons li {
@@ -25183,13 +25232,12 @@ table.dataTable thead .sorting_desc:after {
     .login-wrapper {
       height: calc(100vh - 100px); } }
   @media only screen and (max-width: 767px) {
-    .login-wrapper {
-      display: block;
-      height: auto; }
+    
       .login-wrapper .login-aside-left,
       .login-wrapper .login-aside-right {
         max-width: 100%;
-        flex: 0 0 100%; }
+        flex: 0 0 100%;
+      }
       .login-wrapper .login-logo {
         position: relative;
         margin-bottom: 20px;
@@ -25202,12 +25250,13 @@ table.dataTable thead .sorting_desc:after {
       .login-wrapper .login-aside-left {
         text-align: center;
         width: 100%;
-        display: block; }
+        display: none; }
       .login-wrapper .authincation-content {
         padding: 30px 10px; } }
   @media only screen and (max-width: 575px) {
     .login-wrapper .login-aside-left {
-      padding: 50px 30px; }
+      padding: 50px 30px;
+     }
       .login-wrapper .login-aside-left .login-description {
         padding-bottom: 0; }
     .login-wrapper h2, .login-wrapper .h2, .login-wrapper .h2 {
@@ -25217,7 +25266,11 @@ table.dataTable thead .sorting_desc:after {
 
 .authincation {
   display: flex;
-  min-height: 100vh; }
+  min-height: 100vh; 
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
 
 .pricing_table_content {
   background: #fff;
@@ -26400,9 +26453,6 @@ span#counter {
       margin-top: 3px; }
   .default-select.style-2 .filter-option-inner-inner {
     font-size: 18px; }
-
-.form-group {
-  margin-bottom: 1rem; }
 
 .new-arrival-content.text-center .price {
   float: unset; }
