@@ -5,13 +5,14 @@
     "loremIpsumInfo": "Es un hecho bien establecido que un lector se distraerá con el contenido legible de una página al mirar su diseño. El objetivo de usar Lorem Ipsum es que tiene una distribución más o menos normal de letras.",
     "privacyPolicy": "Política de privacidad",
     "contact": "Contacto",
-    "welcome": "Bienvenido a Karciz",
-    "signInInfo": "Inicia sesión ingresando la información a continuación",
+    "welcome": "Bienvenido",
+    "signInInfo": "Iniciar sesión",
     "email": "Correo electrónico",
     "password": "Contraseña",
-    "rememberPreference": "Recordar mi preferencia",
+    "rememberPreference": "Recordar mi información",
     "signIn": "Iniciar sesión",
     "noAccount": "¿No tienes una cuenta?",
-    "signUp": "Regístrate"
+    "signUp": "Regístrate",
+    "forgotPassword": "¿Olvidaste tu contraseña?"
   }
   
