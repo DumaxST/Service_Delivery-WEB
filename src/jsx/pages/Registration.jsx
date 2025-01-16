@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { connect, useDispatch } from 'react-redux';
-import logo from '../../assets/images/logo-full.png'
+import logo from '../../assets/images/LogoDumax.png'
 import Loader from '../pages/Loader/Loader';
 import {
     loadingToggleAction,
     signupAction,
 } from '../../store/actions/AuthActions';
+import loginbg from "../../assets/images/bg-image.jpeg";
+
 function Register(props) {
     const [email, setEmail] = useState('');
     let errorsObj = { email: '', password: '' };
@@ -38,7 +40,7 @@ function Register(props) {
         dispatch(signupAction(email, password, navigate));
     }
   return (
-    <div className='authincation h-100 p-meddle'>
+    <div className='authincation h-100 p-meddle' style={{ backgroundImage: "url(" + loginbg + ")", }}>
         <div className='container h-100'>
             <div className='row justify-content-center h-100 align-items-center'>
                 <div className='col-md-6'>
@@ -48,7 +50,7 @@ function Register(props) {
                                 {props.showLoading && <Loader />}
                                 <div className='auth-form'>
                                     <div className='text-center mb-3'>
-                                        <img src={logo} alt="" />
+                                        <img src={logo} alt="logo" width={120}/>
                                     </div>
 
                                     <h4 className='text-center mb-4 text-white'>Sign up your account</h4>

@@ -11,8 +11,9 @@ import { useTranslation } from "react-i18next";
 
 //
 import logo from "../../assets/images/logo-2.png";
-import login from "../../assets/images/bg-login2.png";
-import loginbg from "../../assets/images/bg-login.jpg";
+import login from "../../assets/images/bg-image4.jpg";
+import loginbg from "../../assets/images/bg-image.jpeg";
+import { getFakeJson } from "../../common/commonQueries";
 
 function Login(props) {
   let year = new Date().getFullYear();
@@ -21,6 +22,9 @@ function Login(props) {
   let errorsObj = { email: "", password: "" };
   const [errors, setErrors] = useState(errorsObj);
   const [password, setPassword] = useState("123456");
+  const [showPassword, setShowPassword] = useState(false);
+
+  
   const dispatch = useDispatch();
 
   //language
@@ -30,6 +34,7 @@ function Login(props) {
   useEffect(() => {
     i18n.changeLanguage("es");
   }, [i18n]);
+
 
   const toggleSwitch = () => {
     const newLanguage = isEnglish ? "es" : "en";
@@ -62,48 +67,13 @@ function Login(props) {
       className="login-main-page"
       style={{ backgroundImage: "url(" + loginbg + ")" }}
     >
-      <div className="login-wrapper">
+      <div className="login-wrapper vh-100">
         <div
           className="login-aside-left"
           style={{ backgroundImage: "url(" + login + ")" }}
         >
-          <Link to="#" className="login-logo">
-            <img src={logo} alt="" />
-          </Link>
-          <div className="login-description">
-            <h2 className="mb-2">{t("checkStatus")}</h2>
-            <p className="fs-12">
-              {t("loremIpsumInfo")}
-            </p>
-            <ul className="social-icons mt-4">
-              <li>
-                <Link to={"#"}>
-                  <i className="fab fa-facebook-f"></i>
-                </Link>
-              </li>
-              <li>
-                <Link to={"#"}>
-                  <i className="fab fa-twitter"></i>
-                </Link>
-              </li>
-              <li>
-                <Link to={"#"}>
-                  <i className="fab fa-linkedin-in"></i>
-                </Link>
-              </li>
-            </ul>
-            <div className="mt-5">
-              <Link to={"#"} className=" me-4">
-                {t("privacyPolicy")}
-              </Link>
-              <Link to={"#"} className=" me-4">
-                {t("contact")}
-              </Link>
-              <Link to={"#"} className="">
-                © {year} DexignZone
-              </Link>
-            </div>
-          </div>
+         
+         
         </div>
         <div className="login-aside-right">
           <div className="row m-0 justify-content-center h-100 align-items-center">
@@ -147,22 +117,27 @@ function Login(props) {
                           )}
                         </div>
                         <div className="form-group">
-                          <label className="mb-2 ">
-                            <strong>{t("password")}</strong>
-                            <span className="required"> *</span>
-                          </label>
+                        <label className="mb-2 ">
+                          <strong>{t("password")}</strong>
+                          <span className="required"> *</span>
+                        </label>
+                        <div className="input-group">
                           <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             className="form-control"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                           />
-                          {errors.password && (
-                            <div className="text-danger fs-12">
-                              {errors.password}
-                            </div>
-                          )}
+                          <div className="input-group-text" onClick={() => setShowPassword(!showPassword)}>
+                            <i className={showPassword ? "fa fa-eye" : "fa fa-eye-slash"}></i>
+                          </div>
                         </div>
+                        {errors.password && (
+                          <div className="text-danger fs-12">
+                            {errors.password}
+                          </div>
+                        )}
+                      </div>
                         <div className="form-row d-flex justify-content-between mt-4 mb-2">
                           <div className="form-group">
                             <div className="form-check custom-checkbox ms-1 ">
@@ -189,7 +164,12 @@ function Login(props) {
                           </button>
                         </div>
                       </form>
-                      <div className="new-account mt-2">
+                      <div className="text-center mt-3">
+                        <Link to="#" className="text-primary">
+                          {t("forgotPassword")}
+                        </Link>
+                      </div>
+                      <div className="new-account mt-2 text-center">
                         <p className="">
                           {t("noAccount")}{" "}
                           <Link className="text-primary" to="/page-register">
