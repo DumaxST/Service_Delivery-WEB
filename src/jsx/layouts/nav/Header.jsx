@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 import { Link } from "react-router-dom";
 /// Scroll
@@ -10,8 +10,10 @@ import profile from "../../../assets/images/profile/12.png";
 import avatar from "../../../assets/images/avatar/1.jpg";
 import { Dropdown } from "react-bootstrap";
 import { ThemeContext } from "../../../context/ThemeContext";
+import { getUser } from "../../../common/commonQueries";
 
 const Header = ({ onNote, toggle, onProfile, onNotification, onClick }) => {
+	const [user, setUser] = useState({})
 	
 	
   var path = window.location.pathname.split("/");
@@ -40,6 +42,23 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onClick }) => {
     : filterName.includes("editor")
     ? filterName.filter((f) => f !== "editor")
     : filterName;
+
+		useEffect(() => {
+			const userData = () => {
+				const userString = localStorage.getItem("user");
+				if (userString) {
+					const user = JSON.parse(userString);
+					getUser(user.id)
+						.then((userData) => {
+							setUser(userData);
+						})
+						.catch((error) => {
+							console.error("Error fetching user data:", error);
+						});
+				}
+			};
+			userData();
+		}, []);
 
 	const {background, changeBackground}  = useContext(ThemeContext);
 	// changeBackground
@@ -314,9 +333,9 @@ const Header = ({ onNote, toggle, onProfile, onNotification, onClick }) => {
 						</Dropdown> */}
 						<Dropdown as="li" className="nav-item header-profile ">
 							<Dropdown.Toggle as="a" to="#" variant="" className="nav-link i-false c-pointer">								
-								<img src={profile} width="20" alt=""/>
+								<img src={user?.profilePicture?.url} width="20" alt=""/>
 								<div className="header-info">
-									<span>Nadi<i className="fa fa-caret-down ms-3" aria-hidden="true"></i></span>
+									<span>{user?.firstName}<i className="fa fa-caret-down ms-3" aria-hidden="true"></i></span>
 								</div>
                                 
 							</Dropdown.Toggle>

@@ -22,11 +22,12 @@ function withRouter(Component) {
   }
 
 function LogoutPage(){
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     function onLogout() {
-       dispatch(Logout(navigate));
-       // window.location.reload();
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('user');
+      navigate('/login');
+       window.location.reload();
     }
     return(
         <>

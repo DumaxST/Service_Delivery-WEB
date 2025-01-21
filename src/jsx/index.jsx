@@ -127,8 +127,8 @@ import Reports from "./pages/Reports";
 const Markup = () => {
   const allroutes = [
     /// Dashboard
-    { url: "", component: <Home /> },
-    { url: 'dashboard', component: <Home/> },
+    { url: "", component: <DashboardLight /> },
+    { url: 'dashboard', component: <DashboardLight/> },
     { url: 'dashboard-light', component: <DashboardLight/> },
 	  { url: 'event-list', component: <EventList/> },
 	  { url: 'event', component: <EventPage/> },

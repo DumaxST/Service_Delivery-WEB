@@ -1,4 +1,4 @@
-import React, { Fragment, useReducer } from "react";
+import React, { Fragment, useEffect, useReducer, useState } from "react";
 import { Button, Dropdown, Modal, Tab, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import LightGallery from 'lightgallery/react';
@@ -22,6 +22,7 @@ import profile08 from "../../../../assets/images/profile/8.jpg";
 import profile09 from "../../../../assets/images/profile/9.jpg";
 import profile from "../../../../assets/images/profile/profile.png";
 import PageTitle from "../../../layouts/PageTitle";
+import { getUser } from "../../../../common/commonQueries";
 
 const galleryBlog = [
 	{image: profile03}, {image: profile04},
@@ -49,6 +50,25 @@ const reducer = (state, action) =>{
 const AppProfile = () => {
 	
 	const [state, dispatch] = useReducer(reducer, initialState);
+	const [user, setUser] = useState({})
+
+	useEffect(() => {
+        const userData = () => {
+            const userString = localStorage.getItem("user");
+            if (userString) {
+                const user = JSON.parse(userString);
+                getUser(user.id)
+                    .then((userData) => {
+                        setUser(userData);
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching user data:", error);
+                    });
+            }
+        };
+        userData();
+    }, []);
+
 	return (
 		<Fragment>
 		  <PageTitle activeMenu="Profile" motherMenu="App" />
@@ -62,15 +82,15 @@ const AppProfile = () => {
 				  </div>
 				  <div className="profile-info">
 					<div className="profile-photo">
-					  <img src={profile} className="img-fluid rounded-circle" alt="profile"/>
+					  <img src={user?.profilePicture?.url} className="img-fluid rounded-circle" alt="profile"/>
 					</div>
 					<div className="profile-details">
 					  <div className="profile-name px-3 pt-2">
-						<h4 className="text-primary mb-0">Mitchell C. Shay</h4>
-						<p>UX / UI Designer</p>
+					  <h4 className="text-primary mb-0">{`${user?.firstName} ${user?.lastName}`}</h4>						
+					  <p>{user?.role}</p>
 					  </div>
 					  <div className="profile-email px-2 pt-2">
-						<h4 className="text-muted mb-0">hello@email.com</h4>
+						<h4 className="text-muted mb-0">{user?.email}</h4>
 						<p>Email</p>
 					  </div>
 					  <Dropdown className="dropdown ms-auto">
@@ -127,137 +147,14 @@ const AppProfile = () => {
 			</div>
 		  </div>
 		  <div className="row">
-			<div className="col-xl-4">
-				<div className="row">
-					<div className="col-lg-12">
-						<div className="card">
-							<div className="card-body">
-								<div className="profile-statistics">
-									<div className="text-center">
-										<div className="row">
-											<div className="col">
-												<h3 className="m-b-0">150</h3><span>Follower</span>
-											</div>
-											<div className="col">
-												<h3 className="m-b-0">140</h3> <span>Place Stay</span>
-											</div>
-											<div className="col">
-												<h3 className="m-b-0">45</h3> <span>Reviews</span>
-											</div>
-										</div>
-										<div className="mt-4">
-											<Link	to="/post-details"	className="btn btn-primary mb-1 me-1">Follow</Link>
-										<Button as="a" href="#" className="btn btn-primary mb-1 ms-1" onClick={() => dispatch({type:'sendMessage'})}>Send Message</Button>
-										</div>
-									</div>
-								  
-								</div>
-							</div>
-						</div>
-					</div>	
-					<div className="col-lg-12">
-						<div className="card">
-							<div className="card-header border-0 pb-0">
-								<h5 className="text-primary">Today Highlights</h5>
-							</div>	
-							<div className="card-body pt-3"	>	
-								<div className="profile-blog ">
-									<img  src={profile01}  alt="profile" className="img-fluid  mb-4 w-100 " />
-									<Link to="/post-details"> <h4>Darwin Creative Agency Theme</h4> </Link>
-									<p className="mb-0">
-										A small river named Duden flows by their place and supplies
-										it with the necessary regelialia. It is a paradisematic
-										country, in which roasted parts of sentences fly into your
-										mouth.
-									</p>
-								</div>
-							</div>	
-						</div>
-					</div>
-					<div className="col-lg-12">
-						<div className="card">
-							<div className="card-header border-0 pb-0">
-								<h5 className="text-primary ">Interest</h5>
-							</div>
-							<div className="card-body pt-3">
-								<div className="profile-interest ">	
-									<LightGallery									
-										speed={500}
-										plugins={[lgThumbnail, lgZoom]}
-										elementClassNames="row sp4"
-									>
-										
-										{galleryBlog.map((item,index)=>(
-										<div data-src={item.image} className="col-lg-4 col-xl-4 col-sm-4 col-6 int-col mb-1" key={index}>
-											<img src={item.image} style={{width:"100%"}} alt="gallery"/>
-										</div>
-										))}
-									</LightGallery>										
-								</div>
-							</div>	
-						</div>
-					</div>	
-					<div className="col-lg-12">
-						<div className="card">
-							<div className="card-header border-0 pb-0">
-								<h5 className="text-primary">Our Latest News</h5>
-							</div>	
-							<div className="card-body pt-3">
-								<div className="profile-news">
-								  <div className="media pt-3 pb-3">
-									<img src={profile05} alt="" className="me-3 rounded" width={75}/>
-									<div className="media-body">
-										<h5 className="m-b-5">
-											<Link to="/post-details" className="text-black">
-												Collection of textile samples
-											</Link>
-										</h5>
-										<p className="mb-0">I shared this on my fb wall a few months back, and I thought. </p>
-									</div>
-								  </div>
-								  <div className="media pt-3 pb-3">
-									<img src={profile06} alt=""  className="me-3 rounded" width={75}/>
-									<div className="media-body">
-										<h5 className="m-b-5">
-											<Link to="/post-details" className="text-black">
-											Collection of textile samples
-											</Link>
-										</h5>
-										<p className="mb-0">
-											I shared this on my fb wall a few months back, and I
-											thought.
-										</p>
-									</div>
-								  </div>
-								  <div className="media pt-3 ">
-									<img src={profile07} alt="" className="me-3 rounded" width={75} />
-									<div className="media-body">
-										<h5 className="m-b-5">
-											<Link to="/post-details" className="text-black">
-												Collection of textile samples
-											</Link>
-										</h5>
-										<p className="mb-0">
-											I shared this on my fb wall a few months back, and I thought.
-										</p>
-									</div>
-								  </div>
-								</div>
-							</div>	
-						</div>
-					</div>	
-				</div>	
-			</div>	
-			<div className="col-xl-8">
+				
+			<div >
 			  <div className="card">
 				<div className="card-body">
 				  <div className="profile-tab">
 					<div className="custom-tab-1">
 						<Tab.Container defaultActiveKey='Posts'>					
 							<Nav as='ul' className="nav nav-tabs">
-								<Nav.Item as='li' className="nav-item">
-									<Nav.Link to="#my-posts" eventKey='Posts'>Posts</Nav.Link>
-								</Nav.Item>
 								<Nav.Item as='li' className="nav-item">
 									<Nav.Link to="#about-me"  eventKey='About'>About Me</Nav.Link>
 								</Nav.Item>
@@ -266,84 +163,9 @@ const AppProfile = () => {
 								</Nav.Item>
 							</Nav>
 							<Tab.Content>
-								<Tab.Pane id="my-posts"  eventKey='Posts'>
-									<div className="my-post-content pt-3">
-										<div className="post-input">
-												<textarea name="textarea" id="textarea" cols={30} rows={5} className="form-control bg-transparent" placeholder="Please type what you want...."defaultValue={""}/>
-												<Link to="/app-profile" className="btn btn-primary light px-3 me-1"  onClick={() => dispatch({type:'linkModal'})}>
-													<i className="fa fa-link m-0" />{" "}
-												</Link>
-											{/* Modal */}
-											
-											<Link to={"#"} className="btn btn-primary light px-3 me-1"  data-target="#cameraModal" onClick={() => dispatch({type:'cameraModal'})}>
-												<i className="fa fa-camera m-0" />{" "}
-											</Link>
-											{/* Modal */}
-											
-											<Link to={"#"} className="btn btn-primary ms-1" data-target="#postModal" onClick={() => dispatch({type:'postModal'})}>Post</Link>
-											{/* Modal */}
-											
-										</div>
-	
-										<div className="profile-uoloaded-post border-bottom-1 pb-5">
-											<img src={profile08} alt="" className="img-fluid w-100 rounded" />
-											<Link className="post-title" to="/post-details">
-												<h3 className="text-black">Collection of textile samples lay spread</h3>
-											</Link>
-											<p>
-												A wonderful serenity has take possession of my entire soul like these sweet morning of spare which enjoy whole heart.A wonderful serenity has take 
-												possession of my entire soul like these sweet morning of spare which enjoy whole heart.
-											</p>
-											<button className="btn btn-primary me-2">
-												<span className="me-2"> <i className="fa fa-heart" /> </span>Like 
-											</button>
-											<button className="btn btn-secondary" onClick={() => dispatch({type:'replyModal'})}>
-												<span className="me-2"> <i className="fa fa-reply" /></span>Reply
-											</button>
-										</div>
-										<div className="profile-uoloaded-post border-bottom-1 pb-5">
-											<img src={profile09} alt="" className="img-fluid w-100 rounded" />
-											<Link className="post-title" to="/post-details">
-												<h3 className="text-black">Collection of textile samples lay spread</h3>
-											</Link>
-											<p>
-												A wonderful serenity has take possession of my
-												entire soul like these sweet morning of spare which
-												enjoy whole heart.A wonderful serenity has take
-												possession of my entire soul like these sweet
-												morning of spare which enjoy whole heart.
-											</p>
-											<button className="btn btn-primary me-2">
-												<span className="me-2"> <i className="fa fa-heart" /> </span>Like
-											</button>
-											<button className="btn btn-secondary" onClick={() => dispatch({type:'replyModal'})}>
-												<span className="me-2">  <i className="fa fa-reply" /></span>Reply
-											</button>
-										</div>
-										<div className="profile-uoloaded-post pb-3">
-											<img src={profile08} alt="" className="img-fluid  w-100 rounded" />
-											<Link className="post-title" to="/post-details">
-												<h3 className="text-black">Collection of textile samples lay spread</h3>
-											</Link>
-											<p>
-												A wonderful serenity has take possession of my
-												entire soul like these sweet morning of spare which
-												enjoy whole heart.A wonderful serenity has take
-												possession of my entire soul like these sweet
-												morning of spare which enjoy whole heart.
-											</p>
-											<button className="btn btn-primary me-2">
-												<span className="me-2"><i className="fa fa-heart" /></span>Like
-											</button>
-											<button className="btn btn-secondary" onClick={() => dispatch({type:'replyModal'})}>
-												<span className="me-2"> <i className="fa fa-reply" /></span>Reply
-											</button>
-										</div>
-										
-									</div>
-								</Tab.Pane>
+							
 								<Tab.Pane id="about-me" eventKey='About'>
-									<div className="profile-about-me">
+									{/* <div className="profile-about-me">
 										<div className="pt-4 border-bottom-1 pb-3">
 											<h4 className="text-primary">About Me</h4>
 											<p className="mb-2">
@@ -363,8 +185,8 @@ const AppProfile = () => {
 												nice, gilded frame.
 											</p>
 										</div>
-									</div>
-									<div className="profile-skills mb-5">
+									</div> */}
+									{/* <div className="profile-skills mb-5">
 										<h4 className="text-primary mb-2">Skills</h4>
 										<Link to="/app-profile" className="btn btn-primary light btn-xs mb-1 me-1"> Admin</Link>
 										<Link to="/app-profile" className="btn btn-primary light btn-xs mb-1 me-1" > Dashboard</Link>
@@ -372,8 +194,8 @@ const AppProfile = () => {
 										<Link to="/app-profile" className="btn btn-primary light btn-xs mb-1 me-1">Bootstrap</Link>
 										<Link to="/app-profile" className="btn btn-primary light btn-xs mb-1 me-1">Responsive</Link>
 										<Link to="/app-profile" className="btn btn-primary light btn-xs mb-1 me-1">Crypto</Link>
-									</div>
-									<div className="profile-lang  mb-5">
+									</div> */}
+									{/* <div className="profile-lang  mb-5">
 										<h4 className="text-primary mb-2">Language</h4>
 										<Link to="/app-profile" className="text-muted pe-3 f-s-16">
 											<i className="flag-icon flag-icon-us" />English
@@ -384,8 +206,8 @@ const AppProfile = () => {
 										<Link to="/app-profile" className="text-muted pe-3 f-s-16">
 											<i className="flag-icon flag-icon-bd" />Bangla
 										</Link>
-									</div>
-									<div className="profile-personal-info">
+									</div> */}
+									<div className="profile-personal-info mt-4">
 										<h4 className="text-primary mb-4">
 											Personal Information
 										</h4>
@@ -394,7 +216,7 @@ const AppProfile = () => {
 												<h5 className="f-w-500"> Name<span className="pull-right">:</span></h5>
 											</div>
 											<div className="col-9">
-												<span>Mitchell C.Shay</span>
+												<span>{`${user?.firstName} ${user?.lastName}`}</span>
 											</div>
 										</div>
 										<div className="row mb-2">
@@ -402,41 +224,41 @@ const AppProfile = () => {
 												<h5 className="f-w-500">Email<span className="pull-right">:</span></h5>
 											</div>
 											<div className="col-9">
-												<span>example@examplel.com</span>
+												<span>{user?.email}</span>
 											</div>
 										</div>
 										<div className="row mb-2">
 											<div className="col-3">
-												<h5 className="f-w-500">  Availability<span className="pull-right">:</span></h5>
+												<h5 className="f-w-500">Role<span className="pull-right">:</span></h5>
 											</div>
 											<div className="col-9">
-												<span>Full Time (Free Lancer)</span>
+												<span>{user?.role}</span>
 											</div>
 										</div>
 										<div className="row mb-2">
 											<div className="col-3">
-												<h5 className="f-w-500">Age<span className="pull-right">:</span></h5>
+												<h5 className="f-w-500">Phone<span className="pull-right">:</span></h5>
 											</div>
 											<div className="col-9">
-												<span>27</span>
+												<span>{user?.phone}</span>
 											</div>
 										</div>
-										<div className="row mb-2">
+										{/* <div className="row mb-2">
 											<div className="col-3">
 												<h5 className="f-w-500">  Location<span className="pull-right">:</span></h5>
 											</div>
 											<div className="col-9">
 												<span>Rosemont Avenue Melbourne, Florida</span>
 											</div>
-										</div>
-										<div className="row mb-2">
+										</div> */}
+										{/* <div className="row mb-2">
 											<div className="col-3">
 												<h5 className="f-w-500">Year Experience<span className="pull-right">:</span></h5>
 											</div>
 											<div className="col-9">
 												<span>07 Year Experiences</span>
 											</div>
-										</div>
+										</div> */}
 									</div>
 								</Tab.Pane>
 								<Tab.Pane id="profile-settings" eventKey='Setting'>
