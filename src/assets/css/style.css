@@ -345,17 +345,19 @@ h2, .h2 {
   @media (min-width: 1200px) {
     h2, .h2 {
       font-size: 1.875rem; } }
-      @media (max-width: 700px) {
-        h3, .h3 {
-          font-size: 2rem !important;
-        }
-      }
+  
 
 h3, .h3 {
-  font-size: calc(1.275rem + 0.3vw); }
+  font-size: calc(1.575rem + 0.3vw); }
   @media (min-width: 1200px) {
     h3, .h3 {
-      font-size: 1.8rem; } }
+      font-size: 2rem; } }
+      @media (max-width: 767px) {
+        h3, .h3 {
+          font-size: 1.8rem !important;
+          text-align: center; 
+        }
+      }
 
 h4, .h4 {
   font-size: 1.125rem; }
@@ -368,7 +370,14 @@ h6, .h6 {
 
 p {
   margin-top: 0;
-  margin-bottom: 1rem; }
+  margin-bottom: 1rem; 
+}
+@media (max-width: 767px) {
+  p, .p {
+    text-align: center; 
+  }
+}
+
 
 abbr[title],
 abbr[data-bs-original-title] {
@@ -5044,6 +5053,9 @@ textarea.form-control-lg {
   width: 1rem;
   height: 1rem;
   border-width: 0.2em; }
+
+.spinner-border.spinner-border-sm.text-white {
+  color: #fff;}
 
 @keyframes spinner-grow {
   0% {
@@ -18414,7 +18426,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 .photo-content {
   position: relative; }
   .photo-content .cover-photo {
-    background: url(../images/profile/cover.jpg);
+    background: url(../images/bg-image.jpeg);
     background-size: cover;
     background-position: center;
     min-height: 250px;
@@ -25132,7 +25144,7 @@ table.dataTable thead .sorting_desc:after {
     margin-bottom: 15px; }
 
 .login-main-page {
-  padding: 100px;
+  padding: 50px;
   background-size: cover;
   background-position: center;
   position: relative;
@@ -25162,8 +25174,8 @@ table.dataTable thead .sorting_desc:after {
 
 .login-wrapper {
   display: flex;
-  min-height: 600px;
-  height: calc(100vh - 200px);
+  min-height: 595px;
+  height: calc(100vh - 110px);
   box-shadow: 0 0 60px 10px rgba(85, 44, 44, 0.2); }
   .login-wrapper .login-aside-left {
     max-width: 50%;
@@ -25232,7 +25244,8 @@ table.dataTable thead .sorting_desc:after {
     .login-wrapper {
       height: calc(100vh - 100px); } }
   @media only screen and (max-width: 767px) {
-    
+      .login-wrapper {
+        height: 100vh !important }
       .login-wrapper .login-aside-left,
       .login-wrapper .login-aside-right {
         max-width: 100%;
@@ -25270,6 +25283,25 @@ table.dataTable thead .sorting_desc:after {
   background-size: cover;
   background-position: center;
   position: relative;
+}
+
+.custom-swal-button {
+  background-color: #13b497 !important;
+  color: white !important;
+  border: none !important;
+  padding: 10px 20px !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+}
+
+.logo-small-screen {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .logo-small-screen {
+      display: block;
+  }
 }
 
 .pricing_table_content {
