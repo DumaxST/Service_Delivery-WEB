@@ -2,29 +2,35 @@ import React, { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  loadingToggleAction,
-  loginAction,
+ loginConfirmedAction
 } from "../../store/actions/AuthActions";
+import { authUser } from "../../common/commonQueries";
+import Swal from 'sweetalert2'
+
+//firebase
+import { auth } from "../../data/config";
+import { signInWithEmailAndPassword } from "firebase/auth";
+
 
 //language
 import { useTranslation } from "react-i18next";
 
-//
-import logo from "../../assets/images/logo-2.png";
+//images
+import logo from "../../assets/images/LogoDumax.png";
 import login from "../../assets/images/bg-image4.jpg";
 import loginbg from "../../assets/images/bg-image.jpeg";
-import { getFakeJson } from "../../common/commonQueries";
 
 function Login(props) {
+  const { onLoginSuccess } = props;
   let year = new Date().getFullYear();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("demo@example.com");
+  const [email, setEmail] = useState(""); //demo@example.com
   let errorsObj = { email: "", password: "" };
   const [errors, setErrors] = useState(errorsObj);
-  const [password, setPassword] = useState("123456");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  
   const dispatch = useDispatch();
 
   //language
@@ -35,14 +41,16 @@ function Login(props) {
     i18n.changeLanguage("es");
   }, [i18n]);
 
-
   const toggleSwitch = () => {
     const newLanguage = isEnglish ? "es" : "en";
     i18n.changeLanguage(newLanguage);
+   localStorage.setItem("language", JSON.stringify(newLanguage));
     setIsEnglish(!isEnglish);
+    //guardar en storage
+    
   };
 
-  function onLogin(e) {
+  const onLogin = async (e) => {
     e.preventDefault();
     let error = false;
     const errorObj = { ...errorsObj };
@@ -58,8 +66,38 @@ function Login(props) {
     if (error) {
       return;
     }
-    dispatch(loadingToggleAction(true));
-    dispatch(loginAction(email, password, navigate));
+    setLoading(true);
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const tokenAuth = await userCredential.user.getIdToken();
+      const response = await authUser(tokenAuth);
+      if(response.status === 200){
+        setLoading(false);
+        const user = {
+          id: response.data.data.id,
+        }
+        //guardar en storage
+        localStorage.setItem("user", JSON.stringify(user));
+        onLoginSuccess();
+      }
+    } catch (error) {
+      setLoading(false);
+      let errorMessage = t("tryAgain");
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          errorMessage = t("InvalidCredentials");
+      }
+      swal({
+        title: "Error",
+        text: errorMessage,
+        icon: "error",
+        button: {
+            text: "OK",
+            className: "custom-swal-button",
+        },
+    });
+  }
+  
+    
   }
 
   return (
@@ -67,14 +105,11 @@ function Login(props) {
       className="login-main-page"
       style={{ backgroundImage: "url(" + loginbg + ")" }}
     >
-      <div className="login-wrapper vh-100">
+      <div className="login-wrapper">
         <div
           className="login-aside-left"
           style={{ backgroundImage: "url(" + login + ")" }}
-        >
-         
-         
-        </div>
+        ></div>
         <div className="login-aside-right">
           <div className="row m-0 justify-content-center h-100 align-items-center">
             <div className="col-xl-7 col-xxl-7">
@@ -82,11 +117,14 @@ function Login(props) {
                 <div className="row no-gutters">
                   <div className="col-xl-12">
                     <div className="auth-form-1">
+                      <div className='text-center mb-3 logo-small-screen'>
+                         <img src={logo} alt="logo" width={130}/>
+                      </div>
                       <div className="mb-4">
-                        <h3 className="text-primary mb-1">{t("welcome")}</h3>
-                        <p className="">
-                          {t("signInInfo")}
-                        </p>
+                        <h3 className="text-primary mb-1 mt-2">
+                          {t("welcome")}
+                        </h3>
+                        <p className="">{t("signInInfo")}</p>
                       </div>
                       {props.errorMessage && (
                         <div className="bg-red-300 text-red-900 border border-red-900 p-1 my-2">
@@ -117,54 +155,54 @@ function Login(props) {
                           )}
                         </div>
                         <div className="form-group">
-                        <label className="mb-2 ">
-                          <strong>{t("password")}</strong>
-                          <span className="required"> *</span>
-                        </label>
-                        <div className="input-group">
-                          <input
-                            type={showPassword ? "text" : "password"}
-                            className="form-control"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                          />
-                          <div className="input-group-text" onClick={() => setShowPassword(!showPassword)}>
-                            <i className={showPassword ? "fa fa-eye" : "fa fa-eye-slash"}></i>
-                          </div>
-                        </div>
-                        {errors.password && (
-                          <div className="text-danger fs-12">
-                            {errors.password}
-                          </div>
-                        )}
-                      </div>
-                        <div className="form-row d-flex justify-content-between mt-4 mb-2">
-                          <div className="form-group">
-                            <div className="form-check custom-checkbox ms-1 ">
-                              <input
-                                type="checkbox"
-                                className="form-check-input"
-                                id="basic_checkbox_1"
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="basic_checkbox_1"
-                              >
-                                {t("rememberPreference")}
-                              </label>
+                          <label className="mb-2 ">
+                            <strong>{t("password")}</strong>
+                            <span className="required"> *</span>
+                          </label>
+                          <div className="input-group">
+                            <input
+                              type={showPassword ? "text" : "password"}
+                              className="form-control"
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                            />
+                            <div
+                              className="input-group-text"
+                              onClick={() => setShowPassword(!showPassword)}
+                            >
+                              <i
+                                className={
+                                  showPassword ? "fa fa-eye" : "fa fa-eye-slash"
+                                }
+                              ></i>
                             </div>
                           </div>
+                          {errors.password && (
+                            <div className="text-danger fs-12">
+                              {errors.password}
+                            </div>
+                          )}
                         </div>
-                        <div className="text-center">
+
+                        <div className="text-center mt-4">
                           <button
                             type="submit"
                             className="btn btn-primary btn-block"
+                            disabled={loading}
                           >
-                            {t("signIn")}
+                            {loading ? (
+                              <div
+                                className="spinner-border spinner-border-sm text-white"
+                                role="status"
+                              >
+                              </div>
+                            ) : (
+                              t("signIn")
+                            )}
                           </button>
                         </div>
                       </form>
-                      <div className="text-center mt-3">
+                      <div className="text-center mt-4">
                         <Link to="#" className="text-primary">
                           {t("forgotPassword")}
                         </Link>
@@ -177,7 +215,7 @@ function Login(props) {
                           </Link>
                         </p>
                       </div>
-                      <div className="container-languages">
+                      <div className="container-languages mb-2">
                         <span className="language">
                           {isEnglish ? "Eng" : "Esp"}
                         </span>

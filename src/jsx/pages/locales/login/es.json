@@ -13,6 +13,9 @@
     "signIn": "Iniciar sesión",
     "noAccount": "¿No tienes una cuenta?",
     "signUp": "Regístrate",
-    "forgotPassword": "¿Olvidaste tu contraseña?"
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "tryAgain": "Ha ocurrido un error, intente nuevamente",
+    "InvalidCredentials": "Credenciales inválidas"
+
   }
   

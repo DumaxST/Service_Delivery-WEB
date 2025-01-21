@@ -185,14 +185,14 @@ const SideBar = () => {
                 }
               })}          
           </ul>		
-          <div className="plus-box">
+          {/* <div className="plus-box">
             <p className="fs-15 font-w500 mb-1">Get summary report now</p>
             <Link to={"#"} className="text-white fs-26"><i className="las la-long-arrow-alt-right"></i></Link>
-          </div>
-          <div className="copyright">
+          </div> */}
+          {/* <div className="copyright">
             <p className="fs-13 font-w200"><strong className="font-w400">Karciz Ticketing Admin Dashboard</strong> © {d.getFullYear()} All Rights Reserved</p>
             <p>Made with <i className="fa fa-heart text-danger"></i> by DexignZone</p>
-          </div> 
+          </div>  */}
         </PerfectScrollbar>
       </div>
     );

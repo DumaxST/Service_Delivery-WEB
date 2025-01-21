@@ -43,13 +43,12 @@ export function signupAction(email, password, navigate) {
 }
 
 export function Logout(navigate) {
-	localStorage.removeItem('userDetails');
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('user');
     navigate('/login');
 	//history.push('/login');
     
-	return {
-        type: LOGOUT_ACTION,
-    };
+
 }
 
 export function loginAction(email, password, navigate) {

@@ -13,6 +13,9 @@
     "signIn": "Sign In",
     "noAccount": "Don't have an account?",
     "signUp": "Sign up",
-    "forgotPassword": "Forgot Password?"
+    "forgotPassword": "Forgot Password?",
+    "tryAgain": "An error has occurred, try again",
+    "InvalidCredentials": "Invalid Credentials"
+
   }
   
