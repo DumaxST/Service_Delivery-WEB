@@ -1,5 +1,5 @@
 import axios from "axios";
-export const axiosURL =  process.env.REACT_MICROSERVICES_API;
+export const axiosURL = import.meta.env.VITE_MICROSERVICES_API;
 
 const axiosAPI = {
   get: async (ref, params) => {
