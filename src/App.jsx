@@ -1,14 +1,18 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 
 /// Components
 import Index from "./jsx";
 import { connect, useDispatch } from 'react-redux';
 import {  Route, Routes, useLocation , useNavigate , useParams } from 'react-router-dom';
+import Dashboard from './jsx/pages/Dashboard';
+import Error404 from './jsx/pages/Error404';
+import Error403 from './jsx/pages/Error403';
+
 // action
 import { checkAutoLogin } from './services/AuthService';
 import { isAuthenticated } from './store/selectors/AuthSelectors';
-/// Style
 
+/// Style
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./assets/css/style.css";
@@ -43,60 +47,73 @@ function withRouter(Component) {
 
 
 
-function App (props) {
-    const dispatch = useDispatch();
-	  const navigate = useNavigate();
-    useEffect(() => {
-       checkAutoLogin(dispatch, navigate);
-    }, []);
+function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return localStorage.getItem('isAuthenticated') === 'true';
+  });
     
-   
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    let routeblog = ( 
-        
-      <Routes>
-        <Route path='/login' element={<Login />} />
-        <Route path='/page-register' element={<SignUp />} />
-        <Route path='/page-forgot-password' element={<ForgotPassword />} />
-      </Routes> 
-    );
-    if (props.isAuthenticated) {
-		return (
-			<>
-          <Suspense fallback={
-              <div id="preloader">
-                  <div className="sk-three-bounce">
-                      <div className="sk-child sk-bounce1"></div>
-                      <div className="sk-child sk-bounce2"></div>
-                      <div className="sk-child sk-bounce3"></div>
-                  </div>
-              </div>  
-              }
-          >
-            <Index /> 
-          </Suspense>
-      </>
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+    localStorage.setItem('isAuthenticated', 'true'); 
+    navigate('/dashboard'); 
+}
+
+  const routeblog = (
+    <Routes>
+      <Route
+        path="/login"
+        element={<Login onLoginSuccess={handleLoginSuccess} />} // Pasar función como prop
+      />
+      <Route path="/page-register" element={<SignUp />} />
+      <Route path="/page-forgot-password" element={<ForgotPassword />} />
+      {isAuthenticated ? (
+                <Route path="/dashboard" element={<Dashboard />} />
+            ) : (
+                <Route path="*" element={<Error403 />} />
+            )}
+    </Routes>
   );
-	
-	}else{
-		return (
-			<div className="vh-100">
-            <Suspense fallback={
-                <div id="preloader">
-                    <div className="sk-three-bounce">
-                        <div className="sk-child sk-bounce1"></div>
-                        <div className="sk-child sk-bounce2"></div>
-                        <div className="sk-child sk-bounce3"></div>
-                    </div>
+
+  return (
+    <>
+      {isAuthenticated ? (
+        <Suspense
+          fallback={
+            <div id="preloader">
+              <div className="sk-three-bounce">
+                <div className="sk-child sk-bounce1"></div>
+                <div className="sk-child sk-bounce2"></div>
+                <div className="sk-child sk-bounce3"></div>
+              </div>
+            </div>
+          }
+        >
+          <Index />
+        </Suspense>
+      ) : (
+        <div className="vh-100">
+          <Suspense
+            fallback={
+              <div id="preloader">
+                <div className="sk-three-bounce">
+                  <div className="sk-child sk-bounce1"></div>
+                  <div className="sk-child sk-bounce2"></div>
+                  <div className="sk-child sk-bounce3"></div>
                 </div>
-              }
-            >
-                {routeblog}
-            </Suspense>
-			</div>
-		);
-	}
-};
+              </div>
+            }
+          >
+            {routeblog}
+          </Suspense>
+        </div>
+      )}
+    </>
+  );
+}
+
 
 
 const mapStateToProps = (state) => {
