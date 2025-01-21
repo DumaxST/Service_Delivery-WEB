@@ -4,6 +4,7 @@ import {connect, useDispatch } from 'react-redux';
 import {  useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Logout } from '../../../store/actions/AuthActions';
 import { isAuthenticated } from '../../../store/selectors/AuthSelectors';
+import { auth } from '../../../data/config';
 
 function withRouter(Component) {
     function ComponentWithRouterProp(props) {
@@ -23,7 +24,8 @@ function withRouter(Component) {
 
 function LogoutPage(){
     const navigate = useNavigate();
-    function onLogout() {
+    async function onLogout() {
+      await auth.signOut();
       localStorage.removeItem('isAuthenticated');
       localStorage.removeItem('user');
       navigate('/login');
